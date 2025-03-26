@@ -1,0 +1,14 @@
+name: GenerateStory
+template: |
+  Generate a packing list for a {{$days}} day trip to Disney World for {{$people}} person(s).
+template_format: semantic-kernel
+description: A function that generates a packing list for a disney world trip.
+input_variables:
+  - name: days
+    description: The length of the trip in days.
+    is_required: true
+  - name: people
+    description: The number of people going on the trip.
+    is_required: true
+output_variable:
+  description: The generated packing list.
