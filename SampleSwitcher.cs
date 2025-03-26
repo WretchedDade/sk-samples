@@ -7,12 +7,13 @@ using System.Text;
 namespace SemanticKernelSamples;
 public static class SampleSwitcher
 {
-    private static readonly List<ISample> _samples = [
+    private static readonly List<ISample> samples = [
         new BasicChatSample(),
         new BasicChatWithLoggingSample(),
         new StreamingChatSample(),
         new DisneyWorldPackingListPromptSample(),
         new DisneyWorldPackingListToolSample(),
+        new DisneyWorldPackingListStructuredSample(),
         new ParkCapacityTrackingToolSample(),
 
         new Exit(),
@@ -23,39 +24,50 @@ public static class SampleSwitcher
         // Show emojis! 😁
         Console.OutputEncoding = Encoding.UTF8;
 
-        do
+        try
         {
-            Console.Clear();
-
-            SelectionPrompt<ISample> prompt = new SelectionPrompt<ISample>()
-                .Title("Which sample would you like to run?")
-                .PageSize(10)
-                .MoreChoicesText("[grey](Move up and down to reveal more fruits)[/]")
-                .UseConverter(sample => sample.Name)
-                .AddChoices(_samples);
-
-            ISample? sample = AnsiConsole.Prompt(prompt);
-
-            if (sample is null or Exit)
+            do
             {
+                Console.Clear();
+
+                SelectionPrompt<ISample> prompt = new SelectionPrompt<ISample>()
+                    .Title("Which sample would you like to run?")
+                    .PageSize(10)
+                    .MoreChoicesText("[grey](Move up and down to reveal more fruits)[/]")
+                    .UseConverter(sample => sample.Name)
+                    .AddChoices(samples);
+
+                ISample? sample = AnsiConsole.Prompt(prompt);
+
+                if (sample is null or Exit)
+                {
+                    AnsiConsole.Status()
+                        .Start("[red]Exiting...[/]", _ => Thread.Sleep(TimeSpan.FromSeconds(2)));
+
+                    break;
+                }
+
                 AnsiConsole.Status()
-                    .Start("[red]Exiting...[/]", _ => Thread.Sleep(TimeSpan.FromSeconds(2)));
+                    .Start($"You selected [green]{sample.Name}[/]. Starting...", _ => Thread.Sleep(TimeSpan.FromSeconds(2)));
 
-                break;
-            }
+                AnsiConsole.Clear();
 
-            AnsiConsole.Status()
-                .Start($"You selected [green]{sample.Name}[/]. Starting...", _ => Thread.Sleep(TimeSpan.FromSeconds(2)));
+                AnsiConsole.Write(new FigletText(sample.Name).LeftJustified().Color(Color.Blue));
+                AnsiConsole.WriteLine();
 
-            AnsiConsole.Clear();
+                Kernel kernel = sample.GetKernel(enableLogging: forceLoggingOn);
+                await sample.Run(kernel);
 
-            AnsiConsole.Write(new FigletText(sample.Name).LeftJustified().Color(Color.Blue));
+            } while (true);
+        }
+        catch (Exception exception)
+        {
             AnsiConsole.WriteLine();
-
-            Kernel kernel = sample.GetKernel(enableLogging: forceLoggingOn);
-            await sample.Run(kernel);
-
-        } while (true);
+            AnsiConsole.Write(new Rule());
+            AnsiConsole.WriteLine();
+            AnsiConsole.WriteLine();
+            AnsiConsole.WriteException(exception, ExceptionFormats.ShortenEverything);
+        }
     }
 }
 

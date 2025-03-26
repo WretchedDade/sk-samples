@@ -21,12 +21,12 @@ internal class DisneyWorldPackingListToolSample : BasicChatSample, ISample
 
         kernel.Plugins.Add(plugin);
 
-        const string SYSTEM_MESSAGE = @"""
+        const string system_prompt = @"""
             You are a helpful assistant who helps people plan their trips to Disney World.
             Please begin by helping the user put together a packing list.
         """;
 
-        ChatHistory history = [new(AuthorRole.System, SYSTEM_MESSAGE)];
+        ChatHistory history = [new(AuthorRole.System, system_prompt)];
 
         await Run(
             kernel,

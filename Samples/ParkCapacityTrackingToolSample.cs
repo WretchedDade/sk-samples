@@ -14,20 +14,20 @@ internal class ParkCapacityTrackingToolSample : BasicChatSample, ISample
 
         AnsiConsole.WriteLine();
 
-        const string SYSTEM_PROMPT = """
+        const string system_prompt = """
             You are a helpful assistant. You help keep track of the number of people in the park.
             Feel free to name the park, it's just fictional.
 
             Please introduce yourself and explain what you can do and how you will be helping.
 
-            Whenever the number of the people in the park changes, please recap the changes and share the updapted count.
+            Whenever the number of the people in the park changes, please share the updated count.
         """;
 
         _ = kernel.Plugins.AddFromObject(new ParkCapacityPlugin(), "ParkCapacity");
 
         return Run(
             kernel,
-            initialHistory: [new(AuthorRole.System, SYSTEM_PROMPT)],
+            initialHistory: [new(AuthorRole.System, system_prompt)],
             settings: new()
             {
                 FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()

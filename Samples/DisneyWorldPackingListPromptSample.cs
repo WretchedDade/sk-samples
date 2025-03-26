@@ -36,6 +36,9 @@ internal class DisneyWorldPackingListPromptSample : Sample, ISample
         AnsiConsole.WriteLine("Packing List:");
         AnsiConsole.WriteLine(response.ToString());
 
+        AnsiConsole.WriteLine();
+        AnsiConsole.MarkupLine("[gray](press any key to continue)[/]");
+
         _ = Console.ReadKey();
     }
 }
