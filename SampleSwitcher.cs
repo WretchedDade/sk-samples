@@ -21,9 +21,6 @@ public static class SampleSwitcher
 
     public static async Task Run(bool forceLoggingOn = false)
     {
-        // Show emojis! 😁
-        Console.OutputEncoding = Encoding.UTF8;
-
         try
         {
             do

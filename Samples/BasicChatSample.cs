@@ -28,10 +28,10 @@ public class BasicChatSample : Sample, ISample
         if (!history.Any(message => message.Role == AuthorRole.System))
         {
             // Seed with initial system message if another one wasn't already specified
-            history.Add(new(AuthorRole.System, "You are a friendly assistant here to chat with the user about whatever they want. Do your best!"));
+            history.AddSystemMessage("You are a friendly assistant here to chat with the user about whatever they want. Do your best!");
         }
 
-        history.Add(new(AuthorRole.System, "Please introduce yourself."));
+        history.AddSystemMessage("Please introduce yourself.");
 
         do
         {
@@ -52,7 +52,7 @@ public class BasicChatSample : Sample, ISample
                 }
 
                 AnsiConsole.WriteLine();
-                history.Add(new(AuthorRole.Assistant, stringBuilder.ToString()));
+                history.AddAssistantMessage(stringBuilder.ToString());
             }
             else
             {
@@ -63,7 +63,7 @@ public class BasicChatSample : Sample, ISample
                     if (message.Content is string content)
                     {
                         AnsiConsole.WriteLine($"Assistant: {content}");
-                        history.Add(new(AuthorRole.Assistant, content));
+                        history.AddAssistantMessage(content);
                     }
                 }
             }
@@ -73,7 +73,7 @@ public class BasicChatSample : Sample, ISample
             if (userPrompt.Equals("exit", StringComparison.OrdinalIgnoreCase))
                 break;
 
-            history.Add(new(AuthorRole.User, userPrompt));
+            history.AddUserMessage(userPrompt);
 
         } while (true);
     }
