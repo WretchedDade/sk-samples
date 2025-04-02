@@ -23,7 +23,7 @@ internal class DisneyWorldPackingListStructuredSample : BasicChatSample, ISample
         int days = AnsiConsole.Prompt(new TextPrompt<int>("How long in days is your trip to Disney World going to be?"));
         int people = AnsiConsole.Prompt(new TextPrompt<int>("How many people are going?"));
 
-        KernelFunction function = kernel.CreateFunctionFromPromptYaml(FileHelper.LoadPrompt("DisneyWorldPackingList"));
+        _ = kernel.ImportPluginFromPromptDirectoryYaml(FileHelper.BuildPathFromBaseDirectory("Plugins", "DisneyWorldPlugin"));
 
         string jsonSchema = JsonSerializerOptions.Web.GetJsonSchemaAsNode(typeof(PackingList), new JsonSchemaExporterOptions()
         {
@@ -43,7 +43,7 @@ internal class DisneyWorldPackingListStructuredSample : BasicChatSample, ISample
             ["people"] = people.ToString()
         };
 
-        FunctionResult response = await kernel.InvokeAsync(function, arguments);
+        FunctionResult response = await kernel.InvokeAsync("DisneyWorldPlugin", "GenerateDisneyWorldPackingList", arguments);
 
         string content = response.ToString();
 

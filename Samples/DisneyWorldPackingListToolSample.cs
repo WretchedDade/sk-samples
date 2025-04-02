@@ -16,10 +16,7 @@ internal class DisneyWorldPackingListToolSample : BasicChatSample, ISample
 
         AnsiConsole.WriteLine();
 
-        KernelFunction function = kernel.CreateFunctionFromPromptYaml(FileHelper.LoadPrompt("DisneyWorldPackingList"));
-        KernelPlugin plugin = kernel.CreatePluginFromFunctions("DisneyWorld", [function]);
-
-        kernel.Plugins.Add(plugin);
+        _ = kernel.ImportPluginFromPromptDirectoryYaml(FileHelper.BuildPathFromBaseDirectory("Plugins", "DisneyWorldPlugin"));
 
         const string system_prompt = @"""
             You are a helpful assistant who helps people plan their trips to Disney World.

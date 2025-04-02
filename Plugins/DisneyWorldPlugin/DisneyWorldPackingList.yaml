@@ -1,4 +1,4 @@
-name: GenerateStory
+name: GenerateDisneyWorldPackingList
 template: |
   Generate a packing list for a {{$days}} day trip to Disney World for {{$people}} person(s).
 template_format: semantic-kernel

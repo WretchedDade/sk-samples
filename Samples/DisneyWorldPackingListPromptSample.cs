@@ -2,11 +2,6 @@
 using SemanticKernelSamples.Abstractions;
 using SemanticKernelSamples.Helpers;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SemanticKernelSamples.Samples;
 internal class DisneyWorldPackingListPromptSample : Sample, ISample
@@ -23,9 +18,9 @@ internal class DisneyWorldPackingListPromptSample : Sample, ISample
         int days = AnsiConsole.Prompt(new TextPrompt<int>("How long in days is your trip to Disney World going to be?"));
         int people = AnsiConsole.Prompt(new TextPrompt<int>("How many people are going?"));
 
-        var function = kernel.CreateFunctionFromPromptYaml(FileHelper.LoadPrompt("DisneyWorldPackingList"));
+        _ = kernel.ImportPluginFromPromptDirectoryYaml(FileHelper.BuildPathFromBaseDirectory("Plugins", "DisneyWorldPlugin"));
 
-        var response = await kernel.InvokeAsync(function, arguments: new()
+        FunctionResult response = await kernel.InvokeAsync("DisneyWorldPlugin", "GenerateDisneyWorldPackingList", arguments: new()
         {
             ["days"] = days.ToString(),
             ["people"] = people.ToString()
