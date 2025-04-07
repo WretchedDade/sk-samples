@@ -49,7 +49,7 @@ public static class SampleSwitcher
                 }
 
                 AnsiConsole.Status()
-                    .Start($"You selected [green]{sample.Name}[/]. Starting...", _ => Thread.Sleep(TimeSpan.FromSeconds(2)));
+                    .Start($"You selected [green]{sample.Name}[/]. Starting...", _ => Thread.Sleep(TimeSpan.FromSeconds(1)));
 
                 AnsiConsole.Clear();
 
