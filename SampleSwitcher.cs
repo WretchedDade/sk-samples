@@ -1,6 +1,7 @@
 ﻿using Microsoft.SemanticKernel;
 using SemanticKernelSamples.Abstractions;
 using SemanticKernelSamples.Samples;
+using SemanticKernelSamples.Samples.QuestionGenerationAgentSamples;
 using Spectre.Console;
 using System.Text;
 
@@ -15,6 +16,9 @@ public static class SampleSwitcher
         new DisneyWorldPackingListToolSample(),
         new DisneyWorldPackingListStructuredSample(),
         new ParkCapacityTrackingToolSample(),
+        new BasicQuestionGenerationAgentSample(),
+        new TerminatingQuestionGenerationAgentSample(),
+        new SelectingQuestionGenerationAgentSample(),
 
         new Exit(),
     ];
@@ -30,7 +34,7 @@ public static class SampleSwitcher
                 SelectionPrompt<ISample> prompt = new SelectionPrompt<ISample>()
                     .Title("Which sample would you like to run?")
                     .PageSize(10)
-                    .MoreChoicesText("[grey](Move up and down to reveal more fruits)[/]")
+                    .MoreChoicesText("[grey](Move up and down to reveal more samples)[/]")
                     .UseConverter(sample => sample.Name)
                     .AddChoices(samples);
 

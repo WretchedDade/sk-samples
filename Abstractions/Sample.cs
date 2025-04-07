@@ -1,8 +1,10 @@
-﻿using Azure.Identity;
+﻿using Azure.AI.OpenAI;
+using Azure.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
+using Polly;
 
 namespace SemanticKernelSamples.Abstractions;
 
@@ -21,9 +23,14 @@ public abstract class Sample : ISample
 
         IKernelBuilder builder = Kernel.CreateBuilder();
 
+        AzureOpenAIClient client = new(new Uri(azureOpenAIConfig.Endpoint), new AzureCliCredential(), new()
+        {
+            RetryPolicy = new PollyRetryPolicy(),
+        });
+
         foreach (string chatDeployment in azureOpenAIConfig.Deployments.Chat)
         {
-            _ = builder.AddAzureOpenAIChatCompletion(chatDeployment, azureOpenAIConfig.Endpoint, new AzureCliCredential());
+            _ = builder.AddAzureOpenAIChatCompletion(chatDeployment, client);
         }
 
         if (enableLogging)

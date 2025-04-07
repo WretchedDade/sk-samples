@@ -25,15 +25,10 @@ internal class DisneyWorldPackingListStructuredSample : BasicChatSample, ISample
 
         _ = kernel.ImportPluginFromPromptDirectoryYaml(FileHelper.BuildPathFromBaseDirectory("Plugins", "DisneyWorldPlugin"));
 
-        string jsonSchema = JsonSerializerOptions.Web.GetJsonSchemaAsNode(typeof(PackingList), new JsonSchemaExporterOptions()
-        {
-            TreatNullObliviousAsNonNullable = true // This makes the root element not nullable
-        }).ToJsonString();
-
         AzureOpenAIPromptExecutionSettings settings = new()
         {
 #pragma warning disable SKEXP0010 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-            ResponseFormat = OpenAI.Chat.ChatResponseFormat.CreateJsonSchemaFormat("PackingList", BinaryData.FromString(jsonSchema)),
+            ResponseFormat = OpenAI.Chat.ChatResponseFormat.CreateJsonSchemaFormat("PackingList", BinaryData.FromString(typeof(PackingList).ToJsonSchema())),
 #pragma warning restore SKEXP0010 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed
         };
 
